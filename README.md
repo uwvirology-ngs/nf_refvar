@@ -17,24 +17,12 @@ A Nextflow pipeline for viral reference-based variant reporting and genome assem
 
 ## Requirements
 Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation)
+
 Install [`Docker`](https://docs.docker.com/engine/installation/)
 
-## Usage
+## Usage (ex. SC2 Spike Gene)
 
-### Run GitHub version with Docker:
-```bash
-nextflow run uwvirology-ngs/nf_refvar -r main -latest \
-    --input example_samplesheet.csv \
-    --output example_output \
-    --ref $(pwd)/assets/NC_045512.fa \
-    --ref_index $(pwd)/assets/NC_045512.fa.fai \
-    --gff $(pwd)/assets/NC_045512.gff \
-    --genomic_region "NC_045512.2:21563-25384" \
-    --genomic_region_len 3822 \
-    -profile docker
-```
-
-### Run locally with Docker:
+### Run local version with Docker:
 ```bash
 nextflow run main.nf \
     --input example_samplesheet.csv \
@@ -47,10 +35,24 @@ nextflow run main.nf \
     -profile docker
 ```
 
+### Run GitHub version with Docker on AWS:
+```bash
+nextflow run uwvirology-ngs/nf_refvar -r main -latest \
+    --input example_samplesheet.csv \
+    --output example_output \
+    --ref $(pwd)/assets/NC_045512.fa \
+    --ref_index $(pwd)/assets/NC_045512.fa.fai \
+    --gff $(pwd)/assets/NC_045512.gff \
+    --genomic_region "NC_045512.2:21563-25384" \
+    --genomic_region_len 3822 \
+    -profile docker \
+    -c your_nextflow_aws.config
+```
+
 ## Options 
 
 ### Required Parameters
-|Parameter|Explanation| Example (SC2 Spike Gene) |
+|Parameter|Explanation|Example Value|
 |------|-----------|------|
 | `--input` | samplesheet in csv format with fastq information | example_samplesheet.csv |
 | `--output` | output directory (default: nf_mpxv_f13l_output) | example_output |
