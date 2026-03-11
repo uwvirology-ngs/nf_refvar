@@ -24,7 +24,7 @@ include { BBMAP_ALIGN_REF   } from './modules/bbmap_align_ref'
 include { IVAR_TRIM         } from './modules/ivar_trim'
 include { SAMTOOLS_SORT     } from './modules/samtools_sort'
 include { SAMTOOLS_INDEX    } from './modules/samtools_index'
-include { F13L_VARIANTS     } from './modules/f13l_variants'
+include { CDS_VARIANTS     } from './modules/cds_variants'
 include { SUMMARY           } from './modules/summary'
 include { SUMMARY_CLEANUP   } from './modules/summary_cleanup'
 
@@ -116,7 +116,7 @@ workflow {
             bam:    [ meta, bam, bai ]
         }.set { ch_variants_consensus }
 
-    F13L_VARIANTS (
+    CDS_VARIANTS (
         ch_variants_consensus.bam,
         params.ref,
         params.ref_index,
