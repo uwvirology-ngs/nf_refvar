@@ -20,7 +20,7 @@ include { CONSENSUS_ASSEMBLY        } from './subworkflows/consensus_assembly'
 // MODULES
 //
 include { SEQTK_SAMPLE                  } from './modules/seqtk_sample'
-include { BBMAP_ALIGN_REF               } from './modules/bbmap_align_ref'
+include { BWA_ALIGN_REF                 } from './modules/bwa_align_ref'
 include { IVAR_TRIM                     } from './modules/ivar_trim'
 include { SAMTOOLS_SORT                 } from './modules/samtools_sort'
 include { PICARD_ADDORREPLACEREADGROUPS } from './modules/addorreplacereadgroups'
@@ -70,14 +70,14 @@ workflow {
         .collect()
         .set { ch_trim_fail_min_summary }
     
-    BBMAP_ALIGN_REF (
+    BWA_ALIGN_REF (
         ch_align_reads,
         params.ref
     )
 
     if (params.trim_primers) {
         IVAR_TRIM (
-            BBMAP_ALIGN_REF.out.bam,
+            BWA_ALIGN_REF.out.bam,
             ch_bed_file
         )
 
@@ -93,7 +93,7 @@ workflow {
         SAMTOOLS_SORT.out.bam.join(SAMTOOLS_INDEX.out.bai).set { ch_bam }
         
     } else {
-        ch_bam = BBMAP_ALIGN_REF.out.bam
+        ch_bam = BWA_ALIGN_REF.out.bam
     }
 
     PICARD_ADDORREPLACEREADGROUPS (
@@ -102,7 +102,7 @@ workflow {
         [[],[]]
     )
 
-    BBMAP_ALIGN_REF.out.flagstat                                                   
+    BWA_ALIGN_REF.out.flagstat                                                   
         .map { meta, flagstat -> [ meta ] + CheckReads.getFlagstatMappedReads(flagstat, params) }
         .set { ch_mapped_reads }
 

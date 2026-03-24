@@ -1,7 +1,7 @@
-process BBMAP_ALIGN_REF {
+process BWA_ALIGN_REF {
     tag "${meta.id}"
     label 'process_medium_java'
-    container 'quay.io/jefffurlong/revica:ubuntu-20.04'
+    container 'community.wave.seqera.io/library/bwa_samtools:eac4ad78deba8f5d'
 
     input:
     tuple val(meta), path(fastq)
@@ -10,7 +10,6 @@ process BBMAP_ALIGN_REF {
     output:
     tuple val(meta), path("*.sorted.bam"), path("*.sorted.bam.bai"),    emit: bam
     tuple val(meta), path("*.flagstat"),                                emit: flagstat
-    tuple val(meta), path("*.log"),                                     emit: log
 
     when:
     task.ext.when == null || task.ext.when
@@ -34,14 +33,14 @@ process BBMAP_ALIGN_REF {
     }
 
     """
-    bbmap.sh \\
-        ${ref_seq} \\
-        $input \\
-        out=${prefix}.bam \\
-        $args \\
-        threads=$task.cpus \\
-        -Xmx${task.memory.toGiga()}g \\
-        &> ${prefix}.bbmap.log
+    # index the reference genome for bwa
+    bwa index ${ref}
+
+    # generate sequence alignment map (.sam)
+    bwa mem ${ref} ${fastq} > ${prefix}.sam
+
+    # convert to .bam
+    samtools view -bS -o ${prefix}.bam ${prefix}.sam
 
     # remove unmapped reads, sort and index bam files  
     samtools view -b -F 4 -@ ${task.cpus} ${prefix}.bam -o ${prefix}_mapped.bam           
