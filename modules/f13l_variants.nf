@@ -22,13 +22,12 @@ process F13L_VARIANTS {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def mpileup = save_mpileup ? "| tee ${prefix}.mpileup" : ""
-    def f13l_region = 'NC_038235.1:4688-5584'
     """
     samtools \\
         mpileup \\
         $args2 \\
         --reference $ref \\
-        --region ${f13l_region} \\
+        --region ${params.genomic_region} \\
         $bam \\
         $mpileup \\
         | ivar \\
