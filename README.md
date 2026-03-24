@@ -22,7 +22,21 @@ Install [`Docker`](https://docs.docker.com/engine/installation/)
 
 ## Usage
 
-### Run nf_refvar_indel locally with Docker:
+### Run GitHub version with Docker:
+```bash
+nextflow run uwvirology-ngs/nf_refvar_indel -r realign_count_gaps -latest \
+    --input example_samplesheet.csv \
+    --output example_output \
+    --ref $(pwd)/assets/NC_038235.fa \
+    --ref_index $(pwd)/assets/NC_038235.fa.fai \
+    --ref_dict $(pwd)/assets/NC_038235.dict \
+    --gff $(pwd)/assets/NC_038235.gff \
+    --genomic_region "NC_038235.1:4688-5584" \
+    --genomic_region_len 897 \
+    -profile docker
+```
+
+### Run locally with Docker:
 ```bash
 nextflow run main.nf \
     --input example_samplesheet.csv \
