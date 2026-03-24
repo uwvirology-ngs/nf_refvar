@@ -20,35 +20,35 @@ Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#install
 
 Install [`Docker`](https://docs.docker.com/engine/installation/)
 
-## Usage (ex. RSVA)
+## Usage (ex. SC2 Spike Gene)
 
-### Run locally with Docker:
+### Run local version with Docker:
 ```bash
 nextflow run main.nf \
     --input example_samplesheet.csv \
     --output example_output \
-    --ref $(pwd)/assets/NC_038235.fa \
-    --ref_index $(pwd)/assets/NC_038235.fa.fai \
-    --ref_dict $(pwd)/assets/NC_038235.dict \
-    --gff $(pwd)/assets/NC_038235.gff \
-    --genomic_region "NC_038235.1:4688-5584" \
-    --genomic_region_len 897 \
-    -profile docker \
-    -c your_nextflow_aws.config
+    --ref $(pwd)/assets/NC_045512.fa \
+    --ref_index $(pwd)/assets/NC_045512.fa.fai \
+    --ref_dict $(pwd)/assets/NC_045512.dict \
+    --gff $(pwd)/assets/NC_045512.gff \
+    --genomic_region "NC_045512.2:21563-25384" \
+    --genomic_region_len 3822 \
+    -profile docker
 ```
 
-### Run GitHub version with Docker:
+### Run GitHub version with Docker on AWS:
 ```bash
-nextflow run uwvirology-ngs/nf_refvar_indel -r realign_count_gaps -latest \
+nextflow run uwvirology-ngs/nf_refvar_indel -r main -latest \
     --input example_samplesheet.csv \
     --output example_output \
-    --ref $(pwd)/assets/NC_038235.fa \
-    --ref_index $(pwd)/assets/NC_038235.fa.fai \
-    --ref_dict $(pwd)/assets/NC_038235.dict \
-    --gff $(pwd)/assets/NC_038235.gff \
-    --genomic_region "NC_038235.1:4688-5584" \
-    --genomic_region_len 897 \
-    -profile docker
+    --ref $(pwd)/assets/NC_045512.fa \
+    --ref_index $(pwd)/assets/NC_045512.fa.fai \
+    --ref_dict $(pwd)/assets/NC_045512.dict \
+    --gff $(pwd)/assets/NC_045512.gff \
+    --genomic_region "NC_045512.2:21563-25384" \
+    --genomic_region_len 3822 \
+    -profile docker \
+    -c your_nextflow_aws.config
 ```
 
 ## Options
@@ -60,6 +60,7 @@ nextflow run uwvirology-ngs/nf_refvar_indel -r realign_count_gaps -latest \
 | `--output` | output directory (default: nf_output) | example_output |
 | `--ref` | reference genome | assets/NC_045512.fa |
 | `--ref_index` | corresponding index file | assets/NC_045512.fa.fai |
+| `--ref_dict` | corresponding dictionary file | assets/NC_045512.dict |
 | `--gff` | general feature formal file | assets/NC_045512.gff |
 | `--genomic_region` | genomic region of interest for variant calling | "NC_045512.2:21563-25384" | |
 | `--genomic_region_len` | length of region of interest | 3822 |
