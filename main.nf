@@ -46,28 +46,29 @@ workflow {
         ch_input
     )
 
+    if(params.sample) {
+        SEQTK_SAMPLE (
+            INPUT_CHECK.out.reads,
+            params.sample
+        )
+        ch_fast_reads = SEQTK_SAMPLE.out.reads
+    } else {
+        ch_fast_reads = INPUT_CHECK.out.reads
+    }
+
     FASTQ_TRIM_FASTP_FASTQC (
-        INPUT_CHECK.out.reads,
+        ch_fast_reads,
         params.adapter_fasta,
         params.save_trimmed_fail,
         params.save_merged,
         params.skip_fastp,
         params.skip_fastqc
     )
+    ch_align_reads = FASTQ_TRIM_FASTP_FASTQC.out.trim_reads_pass_min
 
     FASTQ_TRIM_FASTP_FASTQC.out.trim_reads_fail_min 
         .collect()
         .set { ch_trim_fail_min_summary }
-
-    if(params.sample) {
-        SEQTK_SAMPLE (
-            FASTQ_TRIM_FASTP_FASTQC.out.trim_reads_pass_min,
-            params.sample
-        )
-        ch_align_reads = SEQTK_SAMPLE.out.reads
-    } else {
-        ch_align_reads = FASTQ_TRIM_FASTP_FASTQC.out.trim_reads_pass_min
-    }
     
     BBMAP_ALIGN_REF (
         ch_align_reads,
