@@ -1,9 +1,9 @@
 # NF_REFVAR_INDEL
 
 ## Description
-Viral reference-based variant reporting and genome assembly. 
+A Nextflow pipeline for viral reference-based variant reporting and genome assembly.
 
-## Methods
+## Workflow
 - Trim reads with fastp (default minimum length 100bp)
 - Consensus genome assembly using BBMap and iVar consensus
     - minimum coverage of 10
@@ -35,8 +35,9 @@ nextflow run main.nf \
     --genomic_region_len 897 \
     -profile docker
 ```
+## Options
 
-### Required Parameters#
+### Required Parameters
 |Parameter|Explanation| Example (SC2 Spike Gene) |
 |------|-----------|------|
 | `--input` | samplesheet in csv format with fastq information | example_samplesheet.csv |
@@ -68,7 +69,7 @@ nextflow run main.nf \
 | `--trim_primers` | trim primers, requires bed file (default: false) |
 | `--bed_file` | bed file containing primer coordinates (required if --trim_primers flag is set) |
 
-### Notes
+## Notes
 - Samplesheet example: `assets/samplesheet.csv`
 - You can create a samplesheet using the bundled python script: `python bin/fastq_dir_samplesheet.py fastq_dir samplesheet_name.csv`
 - Memory and CPU usage for pipeline processes can be adjusted in `conf/base.config`
